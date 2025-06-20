@@ -1,4 +1,4 @@
-export { CreateQuestForm } from "./ui/create-quest-form";
-export { QuestItem } from "./ui/quest-item";
-export type { Quest } from "./model/types";
-export { useQuests } from "./model/use-quests"
+export { CreateGuestForm } from "./ui/create-guest-form";
+export { GuestItem } from "./ui/guest-item";
+export type { Guest } from "./model/types";
+export { useGuests } from "./model/use-guests"

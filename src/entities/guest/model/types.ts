@@ -1,6 +1,6 @@
 type TableId = string
 
-export interface Quest {
+export interface Guest {
     id: string
     name: string
     age: string
@@ -9,4 +9,4 @@ export interface Quest {
     tableId?: string
 }
 
-export type QuestRecord = Record<TableId, Quest[]>
+export type GuestRecord = Record<TableId, Guest[]>

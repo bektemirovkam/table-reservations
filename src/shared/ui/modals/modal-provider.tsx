@@ -25,7 +25,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
                 visible={visible}
                 transparent
                 animationType="fade"
-                onRequestClose={close}
+                onReguestClose={close}
             >
                 <TouchableOpacity style={styles.backdrop} onPress={close} activeOpacity={1} />
                 <View style={styles.modalContainer}>

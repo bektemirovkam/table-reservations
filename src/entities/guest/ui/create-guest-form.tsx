@@ -1,4 +1,4 @@
-import { Quest } from "@/entities/guest/model/types"
+import { Guest } from "@/entities/guest/model/types"
 import { Button } from "@/shared/ui/button"
 import { RadioGroup } from "@/shared/ui/radio-group"
 import { Text } from "@/shared/ui/text"
@@ -6,19 +6,19 @@ import { TextField } from "@/shared/ui/text-field"
 import { useMemo, useState } from "react"
 import { Dimensions, StyleSheet, View } from "react-native"
 
-interface CreateQuestFormProps {
+interface CreateGuestFormProps {
     tableId: string
-    onSubmit: (quest: Quest) => void
+    onSubmit: (guest: Guest) => void
 }
 
-const initialFormData: Partial<Quest> = {
+const initialFormData: Partial<Guest> = {
     name: '',
     age: '',
     side: 'groom',
     gender: 'male'
 }
 
-export const CreateQuestForm = ({ tableId, onSubmit }: CreateQuestFormProps) => {
+export const CreateGuestForm = ({ tableId, onSubmit }: CreateGuestFormProps) => {
 
     const [formData, setFormData] = useState(initialFormData)
 
@@ -45,7 +45,7 @@ export const CreateQuestForm = ({ tableId, onSubmit }: CreateQuestFormProps) => 
     ]), []);
 
     const hanldeSubmit = () => {
-        const quest: Quest = {
+        const guest: Guest = {
             id: `${Date.now()}-${Math.random()}`,
             tableId,
             name: formData.name || '',
@@ -53,7 +53,7 @@ export const CreateQuestForm = ({ tableId, onSubmit }: CreateQuestFormProps) => 
             side: formData.side || 'groom',
             gender: formData.gender || 'male'
         }
-        onSubmit(quest)
+        onSubmit(guest)
     }
 
     const isFormValid = formData.name && formData.age

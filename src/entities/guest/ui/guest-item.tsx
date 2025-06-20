@@ -1,24 +1,24 @@
 import { StyleSheet, View } from "react-native";
-import { Quest } from "../model/types";
+import { Guest } from "../model/types";
 import { Text } from "@/shared/ui/text";
 import { Button } from "@/shared/ui/button";
 
-interface QuestItemProps {
-    quest: Quest;
+interface GuestItemProps {
+    guest: Guest;
     onRemove: (id: string) => void;
 }
 
-export const QuestItem = ({ quest, onRemove }: QuestItemProps) => {
+export const GuestItem = ({ guest, onRemove }: GuestItemProps) => {
     return (
-        <View style={[styles.questItem, { backgroundColor: quest.side === 'groom' ? '#d1e7dd' : '#f8d7da' }]}>
-            <Text numberOfLines={1} style={styles.questText}>{quest.name} (Возраст: {quest.age})</Text>
-            <Button color='white' title="❌" onPress={() => onRemove(quest.id)} />
+        <View style={[styles.guestItem, { backgroundColor: guest.side === 'groom' ? '#d1e7dd' : '#f8d7da' }]}>
+            <Text numberOfLines={1} style={styles.guestText}>{guest.name} (Возраст: {guest.age})</Text>
+            <Button color='white' title="❌" onPress={() => onRemove(guest.id)} />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    questItem: {
+    guestItem: {
         padding: 5,
         borderRadius: 5,
         flexDirection: 'row',
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 50,
     },
-    questText: {
+    guestText: {
         fontSize: 16,
         flex: 1
     },

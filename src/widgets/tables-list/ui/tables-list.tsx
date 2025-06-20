@@ -1,22 +1,23 @@
-import { CreateQuestForm, QuestItem, useQuests } from "@/entities/guest";
+import { CreateGuestForm, GuestItem, useGuests } from "@/entities/guest";
 import { TableItem } from "@/entities/table";
 import { useTables } from "@/entities/table/model/use-tables";
 import { Button } from "@/shared/ui/button";
 import { useModal } from "@/shared/ui/modals/use-modal";
 import { Text } from "@/shared/ui/text";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { NestableDraggableFlatList, NestableScrollContainer } from "react-native-draggable-flatlist";
 
 
 export const TablesList = () => {
     const { tables, removeTable, addTable } = useTables()
-    const { addQuest, questsRecord, removeQuest } = useQuests()
+    const { addGuest, guestsRecord, removeGuest } = useGuests()
 
     const { open: openModal, close: closeModal } = useModal()
 
-    const handleAddQuest = (tableId: string) => {
+    const handleAddGuest = (tableId: string) => {
         openModal({
-            content: <CreateQuestForm tableId={tableId} onSubmit={(quest) => {
-                addQuest(quest)
+            content: <CreateGuestForm tableId={tableId} onSubmit={(guest) => {
+                addGuest(guest)
                 closeModal()
             }} />
         })
@@ -24,22 +25,34 @@ export const TablesList = () => {
 
     return (
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollView}>
+            <NestableScrollContainer contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
                 <View style={styles.list}>
                     {tables.map((table, index) => {
-                        const quests = questsRecord[table.id] || [];
+                        const guests = guestsRecord[table.id] || [];
                         return (
-                            <TableItem filledCount={quests.length} key={table.id} title={`Стол №${index + 1}`}
+                            <TableItem filledCount={guests.length} key={table.id} title={`Стол №${index + 1}`}
                                 slots={{
-                                    content: <View style={styles.questList}>
-                                        {
-                                            quests.map((quest) => (
-                                                <QuestItem key={quest.id} quest={quest} onRemove={removeQuest} />
-                                            )) || <Text style={styles.empty}>Добавьте гостей</Text>
-                                        }
-                                    </View>,
+                                    // content: <View style={styles.guestList}>
+                                    //     {
+                                    //         guests.map((guest) => (
+                                    //             <GuestItem key={guest.id} guest={guest} onRemove={removeGuest} />
+                                    //         )) || <Text style={styles.empty}>Добавьте гостей</Text>
+                                    //     }
+                                    // </View>,
+                                    content: <NestableDraggableFlatList
+                                        data={guests}
+                                        renderItem={({ item }) => {
+
+                                            return <View style={{ borderWidth: 2, borderColor: 'red' }}>
+                                                <GuestItem key={item.id} guest={item} onRemove={removeGuest} />
+                                            </View>
+                                        }}
+                                        keyExtractor={(item) => item.id}
+                                        contentContainerStyle={styles.guestList}
+                                        onDragEnd={({ data }) => console.log(data)}
+                                    />,
                                     actions: <View style={styles.actions}>
-                                        <Button disabled={quests.length >= 8} color='white' title="➕" onPress={() => handleAddQuest(table.id)} />
+                                        <Button disabled={guests.length >= 8} color='white' title="➕" onPress={() => handleAddGuest(table.id)} />
                                         <Button color='white' title="❌" onPress={() => removeTable(table.id)} />
                                     </View>
                                 }}
@@ -47,7 +60,7 @@ export const TablesList = () => {
                         )
                     })}
                 </View>
-            </ScrollView>
+            </NestableScrollContainer>
             <Button
                 onPress={addTable}
                 title="Добавить стол"
@@ -73,7 +86,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 5,
     },
-    questList: {
+    guestList: {
         padding: 5,
         gap: 5,
     },

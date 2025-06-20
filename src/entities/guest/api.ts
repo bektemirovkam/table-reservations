@@ -1,14 +1,14 @@
 import { asyncStorage } from "@/shared/lib/async-storage"
-import { Quest } from "./model/types";
+import { Guest } from "./model/types";
 
 
-const ASYNC_STORAGE_KEY = "quests";
+const ASYNC_STORAGE_KEY = "guests";
 
-export const loadQuests = async () => {
-    const quests = await asyncStorage.load<Quest[]>(ASYNC_STORAGE_KEY);
-    return quests || [];
+export const loadGuests = async () => {
+    const guests = await asyncStorage.load<Guest[]>(ASYNC_STORAGE_KEY);
+    return guests || [];
 }
 
-export const saveQuests = async (quests: Quest[]) => {
-    return await asyncStorage.save(ASYNC_STORAGE_KEY, quests);
+export const saveGuests = async (guests: Guest[]) => {
+    return await asyncStorage.save(ASYNC_STORAGE_KEY, guests);
 }
