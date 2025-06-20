@@ -4,7 +4,7 @@ import { RadioGroup } from "@/shared/ui/radio-group"
 import { Text } from "@/shared/ui/text"
 import { TextField } from "@/shared/ui/text-field"
 import { useMemo, useState } from "react"
-import { StyleSheet, View } from "react-native"
+import { Dimensions, StyleSheet, View } from "react-native"
 
 interface CreateQuestFormProps {
     tableId: string
@@ -102,7 +102,8 @@ export const CreateQuestForm = ({ tableId, onSubmit }: CreateQuestFormProps) => 
 
 const styles = StyleSheet.create({
     form: {
-        padding: 10,
+        padding: 5,
+        width: Dimensions.get('window').width - 40,
     },
     title: {
         fontSize: 24,

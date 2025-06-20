@@ -13,12 +13,12 @@ interface TableItemProps {
 }
 
 export const TableItem = ({ title, slots }: TableItemProps) => {
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
 
     return (
         <View style={styles.tableItem}>
             <View style={styles.tableHeader}>
-                <TouchableOpacity style={styles.tableTitle} onPress={() => setCollapsed(!collapsed)}>
+                <TouchableOpacity style={styles.tableTitle} onPress={() => setCollapsed((prev) => !prev)}>
                     <Text>{title}</Text>
                     <Text>{collapsed ? '▲' : '▼'}</Text>
                 </TouchableOpacity>

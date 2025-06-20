@@ -1,6 +1,7 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Quest } from "../model/types";
 import { Text } from "@/shared/ui/text";
+import { Button } from "@/shared/ui/button";
 
 interface QuestItemProps {
     quest: Quest;
@@ -9,27 +10,25 @@ interface QuestItemProps {
 
 export const QuestItem = ({ quest, onRemove }: QuestItemProps) => {
     return (
-        <View style={styles.questItem}>
-            <Text style={styles.questText}>{quest.name} ({quest.age})</Text>
-            <TouchableOpacity style={styles.removeButton} onPress={() => onRemove(quest.id)}>
-                <Text style={{ color: 'white' }}>❌</Text>
-            </TouchableOpacity>
+        <View style={[styles.questItem, { backgroundColor: quest.side === 'groom' ? '#d1e7dd' : '#f8d7da' }]}>
+            <Text numberOfLines={1} style={styles.questText}>{quest.name} (Возраст: {quest.age})</Text>
+            <Button color='white' title="❌" onPress={() => onRemove(quest.id)} />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     questItem: {
-        padding: 10,
-        backgroundColor: '#f0f0f0',
+        padding: 5,
         borderRadius: 5,
-        marginVertical: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: 50,
     },
     questText: {
-        fontSize: 16
+        fontSize: 16,
+        flex: 1
     },
     removeButton: {
         padding: 5,

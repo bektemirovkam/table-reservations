@@ -31,14 +31,14 @@ export const TablesList = () => {
                             slots={{
                                 content: <View style={styles.questList}>
                                     {
-                                        questsRecord['table.id']?.map((quest) => (
-                                            <QuestItem quest={quest} onRemove={removeQuest} />
-                                        )) || <Text>Добавьте гостей</Text>
+                                        questsRecord[table.id]?.map((quest) => (
+                                            <QuestItem key={quest.id} quest={quest} onRemove={removeQuest} />
+                                        )) || <Text style={styles.empty}>Добавьте гостей</Text>
                                     }
                                 </View>,
                                 actions: <View style={styles.actions}>
-                                    <Button color='white' title="❌" onPress={() => removeTable(table.id)} />
                                     <Button color='white' title="➕" onPress={() => handleAddQuest(table.id)} />
+                                    <Button color='white' title="❌" onPress={() => removeTable(table.id)} />
                                 </View>
                             }}
                         />
@@ -59,20 +59,24 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        padding: 5
+        padding: 5,
     },
     list: {
         flex: 1,
         gap: 10,
+        paddingBottom: 20,
     },
     actions: {
         flexDirection: 'row',
         gap: 5,
     },
     questList: {
-        padding: 5
+        padding: 5,
+        gap: 5,
     },
     empty: {
-
+        height: 50,
+        textAlign: 'center',
+        verticalAlign: 'middle',
     }
 })
