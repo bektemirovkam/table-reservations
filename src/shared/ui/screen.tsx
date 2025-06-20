@@ -1,6 +1,5 @@
-import { ReactNode } from 'react';
-import { KeyboardAvoidingView, ScrollView, StyleSheet, View, ViewProps, ViewStyle } from 'react-native';
-import { isIos } from '../lib/platform';
+import { KeyboardAvoidingView, StyleSheet, View, ViewProps } from 'react-native';
+import { isIos } from '@/shared/lib/platform';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
