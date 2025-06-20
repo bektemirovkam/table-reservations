@@ -27,15 +27,20 @@ export const useQuests = () => {
     }, {} as QuestRecord), [quests]);
 
     const addQuest = (quest: Quest) => {
-        setQuests((prev) => [...prev, quest]);
-        saveQuests(quests);
+        setQuests((prev) => {
+            const newQuests = [...prev, quest];
+            saveQuests(newQuests);
+            return newQuests;
+        });
     }
 
     const removeQuest = (questId: string) => {
-        setQuests((prev) => prev.filter((quest) => quest.id !== questId));
-        saveQuests(quests);
+        setQuests((prev) => {
+            const newQuests = prev.filter((quest) => quest.id !== questId);
+            saveQuests(newQuests);
+            return newQuests;
+        });
     }
-
 
     return {
         questsRecord,

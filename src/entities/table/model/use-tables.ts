@@ -5,8 +5,6 @@ import { loadTables, saveTables } from "../api";
 export const useTables = () => {
     const [tables, setTables] = useState<Table[]>([]);
 
-    const id = useId()
-
     const fecthTables = async () => {
         const data = await loadTables()
         setTables(data);
@@ -19,15 +17,21 @@ export const useTables = () => {
 
     const addTable = () => {
         const table: Table = {
-            id,
+            id: `${Date.now()}-${Math.random()}`
         };
-        setTables((prev) => [...prev, table]);
-        saveTables(tables);
+        setTables((prev) => {
+            const newTables = [...prev, table];
+            saveTables(newTables);
+            return newTables;
+        });
     }
 
     const removeTable = (tableId: string) => {
-        setTables((prev) => prev.filter((table) => table.id !== tableId));
-        saveTables(tables);
+        setTables((prev) => {
+            const newTables = prev.filter((table) => table.id !== tableId);
+            saveTables(newTables);
+            return newTables;
+        });
     }
 
 
