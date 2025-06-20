@@ -26,23 +26,26 @@ export const TablesList = () => {
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollView}>
                 <View style={styles.list}>
-                    {tables.map((table, index) => (
-                        <TableItem key={table.id} title={`Стол №${index + 1}`}
-                            slots={{
-                                content: <View style={styles.questList}>
-                                    {
-                                        questsRecord[table.id]?.map((quest) => (
-                                            <QuestItem key={quest.id} quest={quest} onRemove={removeQuest} />
-                                        )) || <Text style={styles.empty}>Добавьте гостей</Text>
-                                    }
-                                </View>,
-                                actions: <View style={styles.actions}>
-                                    <Button color='white' title="➕" onPress={() => handleAddQuest(table.id)} />
-                                    <Button color='white' title="❌" onPress={() => removeTable(table.id)} />
-                                </View>
-                            }}
-                        />
-                    ))}
+                    {tables.map((table, index) => {
+                        const quests = questsRecord[table.id] || [];
+                        return (
+                            <TableItem filledCount={quests.length} key={table.id} title={`Стол №${index + 1}`}
+                                slots={{
+                                    content: <View style={styles.questList}>
+                                        {
+                                            quests.map((quest) => (
+                                                <QuestItem key={quest.id} quest={quest} onRemove={removeQuest} />
+                                            )) || <Text style={styles.empty}>Добавьте гостей</Text>
+                                        }
+                                    </View>,
+                                    actions: <View style={styles.actions}>
+                                        <Button disabled={quests.length >= 8} color='white' title="➕" onPress={() => handleAddQuest(table.id)} />
+                                        <Button color='white' title="❌" onPress={() => removeTable(table.id)} />
+                                    </View>
+                                }}
+                            />
+                        )
+                    })}
                 </View>
             </ScrollView>
             <Button

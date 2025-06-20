@@ -21,8 +21,8 @@ export const Progress = ({ style, value, ...rest }: ProgressProps) => {
 };
 const styles = StyleSheet.create({
     progress: {
-        width: "100%",
-        height: 4,
+        flex: 1,
+        height: 8,
         backgroundColor: "#e0e0e0",
         borderRadius: 2,
         overflow: "hidden",
