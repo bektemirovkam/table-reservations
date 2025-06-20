@@ -9,19 +9,19 @@ import { StyleSheet } from 'react-native';
 export default function App() {
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <ModalProvider>
-        <GestureHandlerRootView style={styles.root}>
-          <Screen>
+      <GestureHandlerRootView style={styles.root}>
+        <Screen>
+          <ModalProvider>
             <TablesList />
-          </Screen>
-        </GestureHandlerRootView>
-      </ModalProvider>
+          </ModalProvider>
+        </Screen>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1
+    flex: 1,
   }
 })

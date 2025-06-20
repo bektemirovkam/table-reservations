@@ -26,6 +26,11 @@ export const useGuests = () => {
         return acc;
     }, {} as GuestRecord), [guests]);
 
+    const updateGuests = (guests: Guest[]) => {
+        setGuests(guests);
+        saveGuests(guests);
+    }
+
     const addGuest = (guest: Guest) => {
         setGuests((prev) => {
             const newGuests = [...prev, guest];
@@ -46,5 +51,6 @@ export const useGuests = () => {
         guestsRecord,
         addGuest,
         removeGuest,
+        updateGuests
     };
 }

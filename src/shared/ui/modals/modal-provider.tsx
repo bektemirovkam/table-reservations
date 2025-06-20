@@ -1,6 +1,6 @@
 import React, { useState, ReactNode } from 'react';
-import { Modal, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ModalContext, ModalConfig } from './modal-context';
+import { Modal } from './modal';
 
 
 
@@ -18,46 +18,16 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
         setContent(null);
     };
 
+
     return (
         <ModalContext.Provider value={{ open, close }}>
             {children}
             <Modal
-                visible={visible}
-                transparent
-                animationType="fade"
-                onReguestClose={close}
+                isVisible={visible}
+                onClose={close}
             >
-                <TouchableOpacity style={styles.backdrop} onPress={close} activeOpacity={1} />
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        {content}
-                    </View>
-                </View>
+                {content}
             </Modal>
         </ModalContext.Provider>
     );
 };
-
-const styles = StyleSheet.create({
-    backdrop: {
-        flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        position: 'absolute',
-        inset: 0,
-        zIndex: 1,
-    },
-    modalContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    modalContent: {
-        backgroundColor: 'white',
-        borderRadius: 8,
-        padding: 20,
-        minWidth: '90%',
-        position: 'relative',
-        zIndex: 2,
-
-    },
-});
