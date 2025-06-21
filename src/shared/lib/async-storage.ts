@@ -34,8 +34,8 @@ async function clear(): Promise<void> {
 }
 
 export const asyncStorage = {
-    load,
-    save,
-    remove,
-    clear,
-}
+  load,
+  save,
+  remove,
+  clear,
+};

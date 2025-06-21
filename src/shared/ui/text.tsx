@@ -1,8 +1,5 @@
-import {
-    Text as RNText,
-    TextProps as RNTextProps,
-} from "react-native";
+import { Text as RNText, TextProps as RNTextProps } from "react-native";
 
 export const Text = (props: RNTextProps) => {
-    return <RNText {...props} />;
-}
+  return <RNText {...props} />;
+};

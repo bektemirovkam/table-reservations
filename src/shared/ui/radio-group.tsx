@@ -1,5 +1,7 @@
-import RadioGroupLib, { RadioGroupProps } from 'react-native-radio-buttons-group';
+import RadioGroupLib, {
+  RadioGroupProps,
+} from "react-native-radio-buttons-group";
 
 export const RadioGroup = (props: RadioGroupProps) => {
-    return <RadioGroupLib {...props} />
-}
+  return <RadioGroupLib {...props} />;
+};
