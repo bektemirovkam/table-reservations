@@ -4,8 +4,8 @@ import { useTables } from "@/entities/table/model/use-tables";
 import { Button } from "@/shared/ui/button";
 import { useModal } from "@/shared/ui/modals/use-modal";
 import { Text } from "@/shared/ui/text";
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
-import { DraxProvider, DraxView } from "react-native-drax";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { DraxProvider, DraxScrollView } from "react-native-drax";
 
 const TABLE_LIMIT = 8; // Максимальное количество гостей за столом
 
@@ -51,7 +51,7 @@ export const TablesList = () => {
     return (
         <DraxProvider>
             <View style={styles.container}>
-                <ScrollView contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
+                <DraxScrollView style={styles.draxScroll} contentContainerStyle={styles.scrollContentView} showsVerticalScrollIndicator={false}>
                     <View style={styles.list}>
                         {tables.map((table, index) => {
                             const guests = guestsRecord[table.id] || [];
@@ -88,7 +88,7 @@ export const TablesList = () => {
                             )
                         })}
                     </View>
-                </ScrollView>
+                </DraxScrollView>
                 <Button
                     onPress={addTable}
                     title="Добавить стол"
@@ -99,7 +99,10 @@ export const TablesList = () => {
 }
 
 const styles = StyleSheet.create({
-    scrollView: {
+    draxScroll: {
+        flex: 1
+    },
+    scrollContentView: {
         flexGrow: 1
     },
     container: {
