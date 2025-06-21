@@ -21,24 +21,36 @@ export const TableItem = ({ title, slots, filledPercent = 0, onReceiveDragDrop }
     const [collapsed, setCollapsed] = useState(true);
 
     return (
-        <DraxView style={styles.tableItem}
-            onReceiveDragDrop={({ dragged: { payload } }) => {
-                setCollapsed(false)
-                onReceiveDragDrop(payload);
-            }}
-        >
+        <View style={styles.tableItem}>
             <View style={styles.tableHeader}>
-                <TouchableOpacity style={styles.tableTitle} onPress={() => setCollapsed((prev) => !prev)}>
-                    <Text>{title}</Text>
-                    <Progress value={filledPercent} />
-                    <Text>{collapsed ? '▲' : '▼'}</Text>
-                </TouchableOpacity>
+                <DraxView
+                    onReceiveDragDrop={({ dragged: { payload } }) => {
+                        setCollapsed(false)
+                        onReceiveDragDrop(payload);
+                    }}
+                    renderContent={({ viewState }) => {
+                        const receivingDrag = viewState && viewState.receivingDrag;
+
+                        return (
+                            <TouchableOpacity
+                                style={[styles.collapseBtn, { borderColor: receivingDrag ? 'green' : 'transparent' }]}
+                                onPress={() => setCollapsed((prev) => !prev)}
+                                activeOpacity={0.6}
+                            >
+                                <Text>{title}</Text>
+                                <Progress value={filledPercent} />
+                                <Text>{collapsed ? '▲' : '▼'}</Text>
+                            </TouchableOpacity>
+                        )
+                    }}
+                    style={styles.tableTitle}
+                />
                 {slots.actions}
             </View>
             <Collapsible collapsed={collapsed}>
                 {slots.content}
             </Collapsible>
-        </DraxView>
+        </View>
     );
 }
 
@@ -51,7 +63,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#eeeaea',
         alignItems: 'center',
         gap: 10,
-        padding: 10
     },
     tableTitle: {
         flex: 1,
@@ -60,5 +71,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 5,
         gap: 10,
+    },
+    collapseBtn: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 10,
+        padding: 10,
+        borderRadius: 15,
+        borderWidth: 2
     }
 })
