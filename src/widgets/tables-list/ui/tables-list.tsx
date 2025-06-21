@@ -4,9 +4,7 @@ import { useTables } from "@/entities/table/model/use-tables";
 import { Button } from "@/shared/ui/button";
 import { useModal } from "@/shared/ui/modals/use-modal";
 import { Text } from "@/shared/ui/text";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { NestableDraggableFlatList, NestableScrollContainer, ScaleDecorator } from "react-native-draggable-flatlist";
-
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 export const TablesList = () => {
     const { tables, removeTable, addTable } = useTables()
@@ -26,7 +24,7 @@ export const TablesList = () => {
 
     return (
         <View style={styles.container}>
-            <NestableScrollContainer contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
+            <ScrollView contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
                 <View style={styles.list}>
                     {tables.map((table, index) => {
                         const guests = guestsRecord[table.id] || [];
@@ -34,23 +32,13 @@ export const TablesList = () => {
                         return (
                             <TableItem filledCount={guests.length} key={table.id} title={`Стол №${index + 1}`}
                                 slots={{
-                                    content: <NestableDraggableFlatList
-                                        data={guests}
-                                        renderItem={({ item, drag }) => {
-                                            return <ScaleDecorator>
-                                                <TouchableOpacity onLongPress={drag} delayLongPress={100}>
-                                                    <GuestItem
-                                                        guest={item}
-                                                        onRemove={() => removeGuest(item.id)}
-                                                    />
-                                                </TouchableOpacity>
-                                            </ScaleDecorator>
-                                        }}
-                                        keyExtractor={(item) => item.id}
-                                        contentContainerStyle={styles.guestList}
-                                        onDragEnd={({ data }) => updateGuests(data)}
-                                        ListEmptyComponent={<Text style={styles.empty}>Добавьте гостей</Text>}
-                                    />,
+                                    content: <View style={styles.guestList}>
+                                        {
+                                            guests.length ? guests.map((guest) => (
+                                                <GuestItem key={guest.id} guest={guest} onRemove={removeGuest} />
+                                            )) : <Text style={styles.empty}>Добавьте гостей</Text>
+                                        }
+                                    </View>,
                                     actions: <View style={styles.actions}>
                                         <Button disabled={guests.length >= 8} color='white' title="➕" onPress={() => handleAddGuest(table.id)} />
                                         <Button color='white' title="❌" onPress={() => removeTable(table.id)} />
@@ -60,7 +48,7 @@ export const TablesList = () => {
                         )
                     })}
                 </View>
-            </NestableScrollContainer>
+            </ScrollView>
             <Button
                 onPress={addTable}
                 title="Добавить стол"
