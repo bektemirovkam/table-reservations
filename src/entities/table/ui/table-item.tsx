@@ -2,7 +2,8 @@ import { Collapsible } from "@/shared/ui/collapsible";
 import { Progress } from "@/shared/ui/progress";
 import { Text } from "@/shared/ui/text";
 import { useState } from "react";
-import { StyleSheet, Touchable, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { DraxView, useDraxContext } from "react-native-drax";
 
 
 interface TableItemProps {
@@ -11,20 +12,25 @@ interface TableItemProps {
         content: React.ReactNode;
         actions: React.ReactNode;
     }
-    filledCount?: number;
+    filledPercent?: number;
+    onReceiveDragDrop: (payload: unknown) => void
 }
 
-const TABLE_LIMIT = 8; // Максимальное количество гостей за столом
 
-export const TableItem = ({ title, slots, filledCount }: TableItemProps) => {
+export const TableItem = ({ title, slots, filledPercent = 0, onReceiveDragDrop }: TableItemProps) => {
     const [collapsed, setCollapsed] = useState(true);
 
     return (
-        <View style={styles.tableItem}>
+        <DraxView style={styles.tableItem}
+            onReceiveDragDrop={({ dragged: { payload } }) => {
+                setCollapsed(false)
+                onReceiveDragDrop(payload);
+            }}
+        >
             <View style={styles.tableHeader}>
                 <TouchableOpacity style={styles.tableTitle} onPress={() => setCollapsed((prev) => !prev)}>
                     <Text>{title}</Text>
-                    <Progress value={filledCount ? (filledCount / TABLE_LIMIT) * 100 : 0} />
+                    <Progress value={filledPercent} />
                     <Text>{collapsed ? '▲' : '▼'}</Text>
                 </TouchableOpacity>
                 {slots.actions}
@@ -32,7 +38,7 @@ export const TableItem = ({ title, slots, filledCount }: TableItemProps) => {
             <Collapsible collapsed={collapsed}>
                 {slots.content}
             </Collapsible>
-        </View>
+        </DraxView>
     );
 }
 

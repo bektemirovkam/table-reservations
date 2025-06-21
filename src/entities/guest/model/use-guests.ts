@@ -26,9 +26,12 @@ export const useGuests = () => {
         return acc;
     }, {} as GuestRecord), [guests]);
 
-    const updateGuests = (guests: Guest[]) => {
-        setGuests(guests);
-        saveGuests(guests);
+    const changeGuest = (guest: Guest) => {
+        setGuests((prev) => {
+            const newGuests = prev.map((g) => g.id === guest.id ? guest : g);
+            saveGuests(newGuests);
+            return newGuests;
+        });
     }
 
     const addGuest = (guest: Guest) => {
@@ -51,6 +54,6 @@ export const useGuests = () => {
         guestsRecord,
         addGuest,
         removeGuest,
-        updateGuests
+        changeGuest
     };
 }

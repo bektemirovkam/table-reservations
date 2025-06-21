@@ -1,14 +1,17 @@
-import { CreateGuestForm, GuestItem, useGuests } from "@/entities/guest";
+import { CreateGuestForm, Guest, GuestItem, useGuests } from "@/entities/guest";
 import { TableItem } from "@/entities/table";
 import { useTables } from "@/entities/table/model/use-tables";
 import { Button } from "@/shared/ui/button";
 import { useModal } from "@/shared/ui/modals/use-modal";
 import { Text } from "@/shared/ui/text";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import { DraxProvider, DraxView } from "react-native-drax";
+
+const TABLE_LIMIT = 8; // Максимальное количество гостей за столом
 
 export const TablesList = () => {
     const { tables, removeTable, addTable } = useTables()
-    const { addGuest, guestsRecord, removeGuest, updateGuests } = useGuests()
+    const { addGuest, guestsRecord, removeGuest, changeGuest } = useGuests()
 
     const { open: openModal, close: closeModal } = useModal()
 
@@ -22,38 +25,76 @@ export const TablesList = () => {
         })
     }
 
-    return (
-        <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
-                <View style={styles.list}>
-                    {tables.map((table, index) => {
-                        const guests = guestsRecord[table.id] || [];
+    const handleReceiveDragDrop = (payload: Guest, tableId: string) => {
+        const guests = guestsRecord[tableId] || [];
+        const filledCount = guests.length;
 
-                        return (
-                            <TableItem filledCount={guests.length} key={table.id} title={`Стол №${index + 1}`}
-                                slots={{
-                                    content: <View style={styles.guestList}>
-                                        {
-                                            guests.length ? guests.map((guest) => (
-                                                <GuestItem key={guest.id} guest={guest} onRemove={removeGuest} />
-                                            )) : <Text style={styles.empty}>Добавьте гостей</Text>
-                                        }
-                                    </View>,
-                                    actions: <View style={styles.actions}>
-                                        <Button disabled={guests.length >= 8} color='white' title="➕" onPress={() => handleAddGuest(table.id)} />
-                                        <Button color='white' title="❌" onPress={() => removeTable(table.id)} />
-                                    </View>
-                                }}
-                            />
-                        )
-                    })}
+        if (payload.tableId && payload.tableId === tableId) return
+
+        if (filledCount && filledCount >= TABLE_LIMIT) {
+            openModal({
+                content: <View style={styles.filledTable}>
+                    <Text style={{ fontWeight: 'bold' }}>Стол уже заполнен!</Text>
+                    <Text>Максимальное количество гостей за столом - {TABLE_LIMIT}.</Text>
+                    <Button color='red' title="OK" onPress={closeModal} />
                 </View>
-            </ScrollView>
-            <Button
-                onPress={addTable}
-                title="Добавить стол"
-            />
-        </View>
+            })
+            return
+        }
+
+        changeGuest({
+            ...payload,
+            tableId
+        })
+    }
+
+    return (
+        <DraxProvider>
+            <View style={styles.container}>
+                <ScrollView contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
+                    <View style={styles.list}>
+                        {tables.map((table, index) => {
+                            const guests = guestsRecord[table.id] || [];
+                            const filledPercent = guests.length / TABLE_LIMIT * 100;
+
+                            return (
+                                <TableItem
+                                    onReceiveDragDrop={(payload) => handleReceiveDragDrop(payload as Guest, table.id)}
+                                    filledPercent={filledPercent}
+                                    key={table.id}
+                                    title={`Стол №${index + 1}`}
+                                    slots={{
+                                        content: <View
+                                            style={styles.guestList}
+                                        >
+                                            {
+                                                guests.length ? guests.map((guest) => {
+                                                    return (
+                                                        <GuestItem
+                                                            key={guest.id}
+                                                            guest={guest}
+                                                            onRemove={removeGuest}
+                                                        />
+                                                    )
+                                                }) : <Text style={styles.empty}>Добавьте гостей</Text>
+                                            }
+                                        </View>,
+                                        actions: <View style={styles.actions}>
+                                            <Button disabled={guests.length >= 8} color='white' title="➕" onPress={() => handleAddGuest(table.id)} />
+                                            <Button color='white' title="❌" onPress={() => removeTable(table.id)} />
+                                        </View>
+                                    }}
+                                />
+                            )
+                        })}
+                    </View>
+                </ScrollView>
+                <Button
+                    onPress={addTable}
+                    title="Добавить стол"
+                />
+            </View>
+        </DraxProvider>
     );
 }
 
@@ -82,5 +123,8 @@ const styles = StyleSheet.create({
         height: 50,
         textAlign: 'center',
         verticalAlign: 'middle',
+    },
+    filledTable: {
+        gap: 10
     }
 })

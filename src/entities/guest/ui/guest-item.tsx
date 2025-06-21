@@ -1,7 +1,8 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { Guest } from "../model/types";
 import { Text } from "@/shared/ui/text";
 import { Button } from "@/shared/ui/button";
+import { DraxView } from "react-native-drax";
 
 interface GuestItemProps {
     guest: Guest;
@@ -10,10 +11,10 @@ interface GuestItemProps {
 
 export const GuestItem = ({ guest, onRemove }: GuestItemProps) => {
     return (
-        <View style={[styles.guestItem, { backgroundColor: guest.side === 'groom' ? '#d1e7dd' : '#f8d7da' }]}>
+        <DraxView longPressDelay={100} payload={guest} style={[styles.guestItem, { backgroundColor: guest.side === 'groom' ? '#d1e7dd' : '#f8d7da' }]}>
             <Text numberOfLines={1} style={styles.guestText}>{guest.name} (Возраст: {guest.age})</Text>
             <Button color='white' title="❌" onPress={() => onRemove(guest.id)} />
-        </View>
+        </DraxView>
     )
 }
 
